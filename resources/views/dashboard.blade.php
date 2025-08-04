@@ -40,6 +40,9 @@
                                 </div>
                             </div>
                         @endforeach
+                        <div class="mt-5">
+                            {{ $applications->links() }}
+                        </div>
                     @else
                         <div class='flex items-center'>
                             <div class='w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl'>
@@ -62,9 +65,6 @@
                             </div>
                         </div>
                     @endif
-                    <div class="mt-5">
-                        {{ $applications->links() }}
-                    </div>
                 </div>
             </div>
         </div>

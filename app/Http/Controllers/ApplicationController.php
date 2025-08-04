@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailJob;
+use App\Mail\ApplicationCreated;
 use App\Models\Application;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
@@ -16,16 +20,17 @@ class ApplicationController extends Controller
         ]);
 
         if ($request->hasFile('file') && $validated) {
-            $name = $request->file('file')->getClientOriginalName();
-            $path = $request->file('file')->storeAs('files', $name, 'public');
+            $path = $request->file('file')->store('files', 'public');
         }
 
-        Application::create([
+        $application = Application::create([
             'user_id' => auth()->user()->id,
             'subject' => $request->subject,
             'message' => $request->message,
             'file_url' => $path ?? null
         ]);
+
+        dispatch(new SendEmailJob($application));
 
         return redirect()->back();
     }
