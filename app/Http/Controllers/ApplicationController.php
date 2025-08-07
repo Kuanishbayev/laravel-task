@@ -16,6 +16,7 @@ class ApplicationController extends Controller
 {
     public function index()
     {
+        Gate::authorize('client-application-list');
         return view('applications.index', ['applications' => auth()->user()->applications]);
     }
 

@@ -26,5 +26,11 @@ class AppServiceProvider extends ServiceProvider
             $manager_id = 1;
             return $user->id === $manager_id;
         });
+
+
+        Gate::define('client-application-list', function (User $user) {
+            $manager_id = 1;
+            return $user->id !== $manager_id;
+        });
     }
 }
