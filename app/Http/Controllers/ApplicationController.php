@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreApplicationRequest;
 use App\Jobs\SendEmailJob;
 use App\Mail\ApplicationCreated;
 use App\Models\Application;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
-    public function store(Request $request)
+    public function index()
+    {
+        return view('applications.index', ['applications' => auth()->user()->applications]);
+    }
+
+
+    public function store(StoreApplicationRequest $request)
     {
 
 
         if ($this->checkDate()) {
-
-            $validated = $request->validate([
-                'subject' => 'required|max:255',
-                'message' => 'required',
-                'file' => 'file|mimes:jpg,png,pdf'
-            ]);
-
-            if ($request->hasFile('file') && $validated) {
+            if ($request->hasFile('file')) {
                 $path = $request->file('file')->store('files', 'public');
             }
 
